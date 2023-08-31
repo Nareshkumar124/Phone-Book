@@ -2,18 +2,20 @@
 using namespace std;
 class contact
 {
-public:
+private:
     contact *pre = NULL;
     contact *next = NULL;
-    long long phone;
+    string phone;
     string name;
     string email;
-    void displayContact() {
+    void displayContact()
+    {
         cout << "Name: " << this->name << endl;
         cout << "Phone: " << this->phone << endl;
         cout << "Email: " << this->email << endl
              << "\n\n";
     }
+    friend class PhoneBook;
 };
 class PhoneBook
 {
@@ -22,14 +24,14 @@ private:
 
 public:
     PhoneBook() {}
-    void addContact(string name, long long phone, string email);
+    void addContact(string name, string phone, string email);
     void display();
     void search(string name);
 };
 
-void PhoneBook::addContact(string name, long long phone, string email)
+void PhoneBook::addContact(string name,string phone, string email)
 {
-    contact *temp = (contact *)malloc(sizeof(contact));
+    contact *temp = new contact();
     temp->name = name;
     temp->phone = phone;
     temp->email = email;
@@ -56,27 +58,26 @@ void PhoneBook::display()
     while (iter != NULL)
     {
         cout << "Contact " << i << endl;
-        cout << "Name: " << iter->name << endl;
-        cout << "Phone: " << iter->phone << endl;
-        cout << "Email: " << iter->email << endl
-             << "\n\n";
+        iter->displayContact();
         iter = iter->next;
         i++;
     }
 }
-void PhoneBook::search(string name) {
+void PhoneBook::search(string name)
+{
     contact *iter = this->head;
-    while(true) {
-        if (iter->name == name) {
+    while (true)
+    {
+        if (iter->name == name)
+        {
             iter->displayContact();
             break;
         }
     }
 }
-int main()
-{
+int main(){
     PhoneBook data = PhoneBook();
-    data.addContact("Naresh Kumar", 1234567890, "nkk124421@gmail.com");
+    data.addContact("Naresh Kumar", "9466639962", "nkk124421@gmail.com");
     data.display();
-    data.search("Naresh Kumar");
+    // getchar();
 }
