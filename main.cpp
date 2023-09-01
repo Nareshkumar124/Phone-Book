@@ -23,7 +23,9 @@ private:
     contact *head = NULL;
 
 public:
-    PhoneBook() {}
+    PhoneBook(string file) {
+        cout<<file;
+    }
     void addContact(string name, string phone, string email);
     void display();
     void search(string name);
@@ -49,6 +51,8 @@ void PhoneBook::addContact(string name,string phone, string email)
         iter->next = temp;
         temp->pre = iter;
     }
+    // Insert into text file.
+
 }
 void PhoneBook::display()
 {
@@ -68,16 +72,21 @@ void PhoneBook::search(string name)
     contact *iter = this->head;
     while (true)
     {
-        if (iter->name == name)
+        if(iter==NULL){
+            cout<<"Contact Not Found.";
+            break;
+        }
+        else if(iter->name == name)
         {
             iter->displayContact();
             break;
         }
+        iter=iter->next;
     }
 }
 int main(){
-    PhoneBook data = PhoneBook();
-    data.addContact("Naresh Kumar", "9466639962", "nkk124421@gmail.com");
-    data.display();
-    // getchar();
+    PhoneBook book = PhoneBook("data.txt");
+    book.addContact("Naresh Kumar", "9466639962", "nkk124421@gmail.com");
+    // data.display();
+    book.search("Naresh Kuma");
 }
