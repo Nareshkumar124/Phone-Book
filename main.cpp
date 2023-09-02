@@ -1,7 +1,9 @@
 #include <iostream>
+#include <fstream>
 using namespace std;
-string * userInformation();
-void linkList2txt(PhoneBook &book);
+class PhoneBook;
+void linklistTwoTxt(PhoneBook &book);
+string *split(string data);
 class contact
 {
 private:
@@ -17,6 +19,25 @@ private:
         cout << "Email: " << this->email << endl
              << "\n\n";
     }
+    contact *contactDetail()
+    {
+        cout << "Enter Your Name: ";
+        getline(cin, this->name);
+        cout << "Enter Your Phone Number: ";
+        getline(cin, this->phone);
+        cout << "Enter Your Email: ";
+        getline(cin, this->email);
+        return this;
+    }
+    contact *strTwoContact(string data)
+    {
+        string *arr = split(data);
+        this->name = arr[0];
+        this->phone = arr[1];
+        this->email = arr[2];
+        delete [] arr;
+        return this;
+    }
     friend class PhoneBook;
 };
 class PhoneBook
@@ -25,27 +46,42 @@ private:
     contact *head = NULL;
 
 public:
-    PhoneBook(string file) {
-        cout<<file;
-    }
+    PhoneBook(string file);
     void addContact();
     void display();
     void search(string name);
 };
 
-
+PhoneBook::PhoneBook(string file)
+{
+    ifstream contactFile=ifstream(file);
+    string line;
+    contact * iter=head;
+    contact * last=NULL;
+    while (!contactFile.eof())
+    {
+        getline(contactFile,line);
+        contact * newContact=new contact;
+        newContact->strTwoContact(line);
+        if(head==NULL){
+            head=newContact;
+            last=newContact;
+        }
+        else{
+            last->next=newContact;
+            newContact->pre=last;
+            last=newContact;
+        }
+    }
+}
 void PhoneBook::addContact()
 {
-    string * info=userInformation();
-    contact *temp = new contact();
-    temp->name = info[0];
-    temp->phone = info[1];
-    temp->email = info[2];
-    delete[] info;
+    contact *newContact = new contact();
+    newContact->contactDetail();
     contact *iter = head;
     if (head == NULL)
     {
-        head = temp;
+        head = newContact;
     }
     else
     {
@@ -53,11 +89,10 @@ void PhoneBook::addContact()
         {
             iter = iter->next;
         }
-        iter->next = temp;
-        temp->pre = iter;
+        iter->next = newContact;
+        newContact->pre = iter;
     }
     // Insert into text file.
-
 }
 
 void PhoneBook::display()
@@ -79,38 +114,53 @@ void PhoneBook::search(string name)
     contact *iter = this->head;
     while (true)
     {
-        if(iter==NULL){
-            cout<<"Contact Not Found.";
+        if (iter == NULL)
+        {
+            cout << "Contact Not Found.";
             break;
         }
-        else if(iter->name == name)
+        else if (iter->name == name)
         {
             iter->displayContact();
             break;
         }
-        iter=iter->next;
+        iter = iter->next;
     }
 }
 
-
-int main(){
+int main()
+{
     PhoneBook book = PhoneBook("data.txt");
-    book.addContact();
     book.display();
-    book.search("Naresh Kuma");
+    // book.search("Naresh Kuma");
 }
 
-string * userInformation(){
-    string * info=new string[3];
-    cout<<"Enter Your Name: ";
-    getline(cin,info[0]);
-    cout<<"Enter Your Phone Number: ";
-    getline(cin,info[1]);
-    cout<<"Enter Your Email: ";
-    getline(cin,info[2]);
-    return info;
-}
 
-void linkList2txt(PhoneBook &book){
+void linklistTwoTxt(PhoneBook &book)
+{
     printf("Write");
+}
+string *split(string data)
+{
+    int start = 0, end = 0;
+    int inputNumber = 0;
+    string *arr = new string[3]{"", "", ""};
+    for (int i = 0; i < data.length(); i++)
+    {
+        if (data[i] == ',')
+        {
+            for (; start < end; start++)
+            {
+                arr[inputNumber] += data[start];
+            }
+            inputNumber += 1;
+            start++;
+        }
+        end++;
+    }
+    for (; start < end; start++)
+    {
+        arr[inputNumber] += data[start];
+    }
+    return arr;
 }
