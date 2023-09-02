@@ -1,5 +1,7 @@
 #include <iostream>
 using namespace std;
+string * userInformation();
+void linkList2txt(PhoneBook &book);
 class contact
 {
 private:
@@ -26,17 +28,20 @@ public:
     PhoneBook(string file) {
         cout<<file;
     }
-    void addContact(string name, string phone, string email);
+    void addContact();
     void display();
     void search(string name);
 };
 
-void PhoneBook::addContact(string name,string phone, string email)
+
+void PhoneBook::addContact()
 {
+    string * info=userInformation();
     contact *temp = new contact();
-    temp->name = name;
-    temp->phone = phone;
-    temp->email = email;
+    temp->name = info[0];
+    temp->phone = info[1];
+    temp->email = info[2];
+    delete[] info;
     contact *iter = head;
     if (head == NULL)
     {
@@ -54,6 +59,7 @@ void PhoneBook::addContact(string name,string phone, string email)
     // Insert into text file.
 
 }
+
 void PhoneBook::display()
 {
     contact *iter = this->head;
@@ -67,6 +73,7 @@ void PhoneBook::display()
         i++;
     }
 }
+
 void PhoneBook::search(string name)
 {
     contact *iter = this->head;
@@ -84,9 +91,26 @@ void PhoneBook::search(string name)
         iter=iter->next;
     }
 }
+
+
 int main(){
     PhoneBook book = PhoneBook("data.txt");
-    book.addContact("Naresh Kumar", "9466639962", "nkk124421@gmail.com");
-    // data.display();
+    book.addContact();
+    book.display();
     book.search("Naresh Kuma");
+}
+
+string * userInformation(){
+    string * info=new string[3];
+    cout<<"Enter Your Name: ";
+    getline(cin,info[0]);
+    cout<<"Enter Your Phone Number: ";
+    getline(cin,info[1]);
+    cout<<"Enter Your Email: ";
+    getline(cin,info[2]);
+    return info;
+}
+
+void linkList2txt(PhoneBook &book){
+    printf("Write");
 }
