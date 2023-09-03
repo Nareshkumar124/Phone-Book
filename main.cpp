@@ -50,6 +50,7 @@ public:
     void addContact();
     void display();
     void search(string name);
+    ~PhoneBook();
 };
 
 PhoneBook::PhoneBook(string file)
@@ -73,6 +74,26 @@ PhoneBook::PhoneBook(string file)
             last=newContact;
         }
     }
+    contactFile.close();
+}
+PhoneBook::~PhoneBook(){
+    ofstream contactFile=ofstream("data.txt");
+    contact * iter=head;
+    while(true){
+        string data="";
+        data+=iter->name+",";
+        data+=iter->phone+",";
+        data+=iter->email;
+        contactFile<<data;
+        iter=iter->next;
+        if(iter!=NULL){
+            contactFile<<"\n";
+        }
+        else{
+            break;
+        }
+    }
+    contactFile.close();
 }
 void PhoneBook::addContact()
 {
@@ -92,7 +113,6 @@ void PhoneBook::addContact()
         iter->next = newContact;
         newContact->pre = iter;
     }
-    // Insert into text file.
 }
 
 void PhoneBook::display()
@@ -133,6 +153,7 @@ int main()
     PhoneBook book = PhoneBook("data.txt");
     book.display();
     // book.search("Naresh Kuma");
+    // book.addContact();
 }
 
 

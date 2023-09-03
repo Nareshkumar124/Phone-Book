@@ -1,2 +1,3 @@
 *.exe
-*.vscode
+.vscode
+data2.txt
