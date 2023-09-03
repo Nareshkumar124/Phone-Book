@@ -29,7 +29,7 @@ private:
         getline(cin, this->email);
         return this;
     }
-    contact *strTwoContact(string data)
+    contact * strTwoContact(string data)
     {
         string *arr = split(data);
         this->name = arr[0];
