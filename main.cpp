@@ -1,8 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
 class PhoneBook;
 string *split(string data);
+string toLowerCase(const string & input);
 class contact
 {
 private:
@@ -160,12 +162,14 @@ void PhoneBook::display()
 
 void PhoneBook::searchContact(string searchTerm)
 {
+
     contact *current = head;
     bool found = false;
+    searchTerm=toLowerCase(searchTerm);
 
     while (current != NULL)
     {
-        if (current->name.find(searchTerm) != string::npos || current->phone.find(searchTerm) != string::npos)
+        if (toLowerCase(current->name).find(searchTerm) != string::npos || current->phone.find(searchTerm) != string::npos)
         {
             // Found a matching contact, display it.
             current->displayContact();
@@ -181,13 +185,57 @@ void PhoneBook::searchContact(string searchTerm)
     }
 }
 
+void PhoneBook::deleteContact(string searchTerm)  // Work on it.
+{
+    contact *current = head;
+    contact *previous = NULL;
+
+    // Search for the contact based on name or phone number
+    while (current != NULL)
+    {
+        if (current->name == searchTerm || current->phone == searchTerm)
+        {
+            // Found the contact, now delete it
+
+            // Update the pointers of adjacent contacts
+            if (previous != NULL)
+            {
+                previous->next = current->next;
+                if (current->next != NULL)
+                {
+                    current->next->pre = previous;
+                }
+            }
+            else
+            {
+                // Deleting the head of the list
+                head = current->next;
+                if (head != NULL)
+                {
+                    head->pre = NULL;
+                }
+            }
+
+            // Deallocate memory for the deleted contact
+            delete current;
+
+            cout << "Contact deleted successfully." << endl;
+            return;
+        }
+
+        previous = current;
+        current = current->next;
+    }
+
+    cout << "Contact not found." << endl;
+}
 
 int main()
 {
     PhoneBook book = PhoneBook("data.txt");
     // book.addContact();
     // book.display();
-    book.searchContact("");
+    book.searchContact("naresh");
     // book.search("Naresh Kuma");
     // book.addContact();
 }
@@ -217,4 +265,13 @@ string *split(string data)
         arr[inputNumber] += data[start];
     }
     return arr;
+}
+string toLowerCase(const string & input)
+{
+    string result = input;
+    for(int i=0;i<result.length();i++){
+        result[i]=tolower(result[i]);
+    }
+
+    return result;
 }

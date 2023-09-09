@@ -1,4 +1,4 @@
-*
 *.exe
 .vscode
 data2.txt
+test.cpp
