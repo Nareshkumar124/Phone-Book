@@ -2,7 +2,6 @@
 #include <fstream>
 using namespace std;
 class PhoneBook;
-void linklistTwoTxt(PhoneBook &book);
 string *split(string data);
 class contact
 {
@@ -43,6 +42,7 @@ private:
 class PhoneBook
 {
 private:
+    string fileName;
     contact *head = NULL;
 
 public:
@@ -55,6 +55,7 @@ public:
 
 PhoneBook::PhoneBook(string file)
 {
+    this->fileName=file;
     ifstream contactFile=ifstream(file);
     string line;
     contact * iter=head;
@@ -77,7 +78,8 @@ PhoneBook::PhoneBook(string file)
     contactFile.close();
 }
 PhoneBook::~PhoneBook(){
-    ofstream contactFile=ofstream("data.txt");
+    // Use to load txt file into PhoneBook data structure
+    ofstream contactFile=ofstream(this->fileName);
     contact * iter=head;
     while(true){
         string data="";
@@ -95,28 +97,71 @@ PhoneBook::~PhoneBook(){
     }
     contactFile.close();
 }
+// void PhoneBook::addContact()
+// {
+//     contact *newContact = new contact();
+//     newContact->contactDetail();
+//     contact *iter = head;
+//     if (head == NULL)
+//     {
+//         head = newContact;
+//     }
+//     else
+//     {
+//         while (iter->next != NULL)
+//         {
+//             iter = iter->next;
+//         }
+//         iter->next = newContact;
+//         newContact->pre = iter;
+//     }
+// }
 void PhoneBook::addContact()
 {
     contact *newContact = new contact();
     newContact->contactDetail();
-    contact *iter = head;
+
     if (head == NULL)
     {
         head = newContact;
     }
     else
     {
-        while (iter->next != NULL)
+        // Find the correct position to insert the contact alphabetically
+        contact *current = head;
+        contact *previous = NULL;
+
+        while (current != NULL && current->name < newContact->name)
         {
-            iter = iter->next;
+            previous = current;
+            current = current->next;
         }
-        iter->next = newContact;
-        newContact->pre = iter;
+
+        if (previous == NULL)
+        {
+            // Insert at the beginning
+            newContact->next = head;
+            head->pre = newContact;
+            head = newContact;
+        }
+        else
+        {
+            // Insert in the middle or at the end
+            previous->next = newContact;
+            newContact->pre = previous;
+            newContact->next = current;
+            if (current != NULL)
+            {
+                current->pre = newContact;
+            }
+        }
     }
 }
 
+
 void PhoneBook::display()
 {
+    // Use to display contact list.
     contact *iter = this->head;
     int i = 1;
     cout << "Contacts:  \n";
@@ -151,18 +196,16 @@ void PhoneBook::search(string name)
 int main()
 {
     PhoneBook book = PhoneBook("data.txt");
+    // book.addContact();
     book.display();
     // book.search("Naresh Kuma");
     // book.addContact();
 }
 
 
-void linklistTwoTxt(PhoneBook &book)
-{
-    printf("Write");
-}
 string *split(string data)
 {
+    // This functtion use to convert string into arr if string in a given order.
     int start = 0, end = 0;
     int inputNumber = 0;
     string *arr = new string[3]{"", "", ""};
