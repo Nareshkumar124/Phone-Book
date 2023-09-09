@@ -48,8 +48,9 @@ private:
 public:
     PhoneBook(string file);
     void addContact();
+    void deleteContact(string searchTerm);
+    void searchContact(string searchTerm);
     void display();
-    void search(string name);
     ~PhoneBook();
 };
 
@@ -97,27 +98,10 @@ PhoneBook::~PhoneBook(){
     }
     contactFile.close();
 }
-// void PhoneBook::addContact()
-// {
-//     contact *newContact = new contact();
-//     newContact->contactDetail();
-//     contact *iter = head;
-//     if (head == NULL)
-//     {
-//         head = newContact;
-//     }
-//     else
-//     {
-//         while (iter->next != NULL)
-//         {
-//             iter = iter->next;
-//         }
-//         iter->next = newContact;
-//         newContact->pre = iter;
-//     }
-// }
+
 void PhoneBook::addContact()
 {
+    // This function use to add contact alphabetically
     contact *newContact = new contact();
     newContact->contactDetail();
 
@@ -174,30 +158,36 @@ void PhoneBook::display()
     }
 }
 
-void PhoneBook::search(string name)
+void PhoneBook::searchContact(string searchTerm)
 {
-    contact *iter = this->head;
-    while (true)
+    contact *current = head;
+    bool found = false;
+
+    while (current != NULL)
     {
-        if (iter == NULL)
+        if (current->name.find(searchTerm) != string::npos || current->phone.find(searchTerm) != string::npos)
         {
-            cout << "Contact Not Found.";
-            break;
+            // Found a matching contact, display it.
+            current->displayContact();
+            found = true;
         }
-        else if (iter->name == name)
-        {
-            iter->displayContact();
-            break;
-        }
-        iter = iter->next;
+
+        current = current->next;
+    }
+
+    if (!found)
+    {
+        cout << "Contact not found." << endl;
     }
 }
+
 
 int main()
 {
     PhoneBook book = PhoneBook("data.txt");
     // book.addContact();
-    book.display();
+    // book.display();
+    book.searchContact("");
     // book.search("Naresh Kuma");
     // book.addContact();
 }
