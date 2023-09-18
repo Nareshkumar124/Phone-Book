@@ -1,10 +1,11 @@
 #include <iostream>
 #include <fstream>
-#include <string>
+
+
 using namespace std;
 class PhoneBook;
 string *split(string data);
-string toLowerCase(const string & input);
+string toLowerCase(const string &input);
 class contact
 {
 private:
@@ -30,13 +31,13 @@ private:
         getline(cin, this->email);
         return this;
     }
-    contact * strTwoContact(string data)
+    contact *strTwoContact(string data)
     {
         string *arr = split(data);
         this->name = arr[0];
         this->phone = arr[1];
         this->email = arr[2];
-        delete [] arr;
+        delete[] arr;
         return this;
     }
     friend class PhoneBook;
@@ -58,43 +59,49 @@ public:
 
 PhoneBook::PhoneBook(string file)
 {
-    this->fileName=file;
-    ifstream contactFile=ifstream(file);
+    this->fileName = file;
+    ifstream contactFile = ifstream(file);
     string line;
-    contact * iter=head;
-    contact * last=NULL;
+    contact *iter = head;
+    contact *last = NULL;
     while (!contactFile.eof())
     {
-        getline(contactFile,line);
-        contact * newContact=new contact;
+        getline(contactFile, line);
+        contact *newContact = new contact;
         newContact->strTwoContact(line);
-        if(head==NULL){
-            head=newContact;
-            last=newContact;
+        if (head == NULL)
+        {
+            head = newContact;
+            last = newContact;
         }
-        else{
-            last->next=newContact;
-            newContact->pre=last;
-            last=newContact;
+        else
+        {
+            last->next = newContact;
+            newContact->pre = last;
+            last = newContact;
         }
     }
     contactFile.close();
 }
-PhoneBook::~PhoneBook(){
+PhoneBook::~PhoneBook()
+{
     // Use to load txt file into PhoneBook data structure
-    ofstream contactFile=ofstream(this->fileName);
-    contact * iter=head;
-    while(true){
-        string data="";
-        data+=iter->name+",";
-        data+=iter->phone+",";
-        data+=iter->email;
-        contactFile<<data;
-        iter=iter->next;
-        if(iter!=NULL){
-            contactFile<<"\n";
+    ofstream contactFile = ofstream(this->fileName);
+    contact *iter = head;
+    while (true)
+    {
+        string data = "";
+        data += iter->name + ",";
+        data += iter->phone + ",";
+        data += iter->email;
+        contactFile << data;
+        iter = iter->next;
+        if (iter != NULL)
+        {
+            contactFile << "\n";
         }
-        else{
+        else
+        {
             break;
         }
     }
@@ -144,7 +151,6 @@ void PhoneBook::addContact()
     }
 }
 
-
 void PhoneBook::display()
 {
     // Use to display contact list.
@@ -165,7 +171,7 @@ void PhoneBook::searchContact(string searchTerm)
 
     contact *current = head;
     bool found = false;
-    searchTerm=toLowerCase(searchTerm);
+    searchTerm = toLowerCase(searchTerm);
 
     while (current != NULL)
     {
@@ -185,7 +191,7 @@ void PhoneBook::searchContact(string searchTerm)
     }
 }
 
-void PhoneBook::deleteContact(string searchTerm)  // Work on it.
+void PhoneBook::deleteContact(string searchTerm) // Work on it.
 {
     contact *current = head;
     contact *previous = NULL;
@@ -195,7 +201,6 @@ void PhoneBook::deleteContact(string searchTerm)  // Work on it.
     {
         if (current->name == searchTerm || current->phone == searchTerm)
         {
-            // Found the contact, now delete it
 
             // Update the pointers of adjacent contacts
             if (previous != NULL)
@@ -235,11 +240,13 @@ int main()
     PhoneBook book = PhoneBook("data.txt");
     // book.addContact();
     // book.display();
-    book.searchContact("naresh");
+    // book.searchContact("07469");
+    // book.addContact();
+    book.searchContact("94666");
+    // book.display();
     // book.search("Naresh Kuma");
     // book.addContact();
 }
-
 
 string *split(string data)
 {
@@ -266,11 +273,12 @@ string *split(string data)
     }
     return arr;
 }
-string toLowerCase(const string & input)
+string toLowerCase(const string &input)
 {
     string result = input;
-    for(int i=0;i<result.length();i++){
-        result[i]=tolower(result[i]);
+    for (int i = 0; i < result.length(); i++)
+    {
+        result[i] = tolower(result[i]);
     }
 
     return result;

@@ -1,6 +1,6 @@
 Ashok kumar,9466639962,ashok@gmail.com
+Gurparvez Singh,6239286081,gurparvez04@gmail.com
 Harsh Kumar,7051956605,harsh@gmail.com
-Gurpervej,1234567890,gurpervej@gmail.com
 Naresh kumar,9817307469,nkk124421@gmail.com
 Neeraj kumar,8685008861,neeraj@gmail.com
-Prince kumar,7015292107,prince@gmail.com
+Prince Kumar,7015292107,prince@gmail.com
