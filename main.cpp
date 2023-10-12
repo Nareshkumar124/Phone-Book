@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
-
-
+#include <string>
 using namespace std;
+
 class PhoneBook;
 string *split(string data);
 string toLowerCase(const string &input);
@@ -23,7 +23,9 @@ private:
     }
     contact *contactDetail()
     {
-        cout << "Enter Your Name: ";
+        string temp;
+        getline(cin,temp); //Extra new line char come.
+        cout << "Enter Your Name(Full Name): ";
         getline(cin, this->name);
         cout << "Enter Your Phone Number: ";
         getline(cin, this->phone);
@@ -33,7 +35,7 @@ private:
     }
     contact *strTwoContact(string data)
     {
-        string *arr = split(data);
+        string *arr = split(data);  //return array of string
         this->name = arr[0];
         this->phone = arr[1];
         this->email = arr[2];
@@ -124,13 +126,13 @@ void PhoneBook::addContact()
         contact *current = head;
         contact *previous = NULL;
 
-        while (current != NULL && current->name < newContact->name)
+        while (current != NULL && current->name < newContact->name) // A,B,C
         {
             previous = current;
             current = current->next;
-        }
+        }  
 
-        if (previous == NULL)
+        if (previous == NULL)   //Insert At head(means insert at head)
         {
             // Insert at the beginning
             newContact->next = head;
@@ -143,6 +145,8 @@ void PhoneBook::addContact()
             previous->next = newContact;
             newContact->pre = previous;
             newContact->next = current;
+
+
             if (current != NULL)
             {
                 current->pre = newContact;
@@ -237,15 +241,53 @@ void PhoneBook::deleteContact(string searchTerm) // Work on it.
 
 int main()
 {
-    PhoneBook book = PhoneBook("data.txt");
-    // book.addContact();
-    // book.display();
-    // book.searchContact("07469");
-    // book.addContact();
-    book.searchContact("94666");
-    // book.display();
-    // book.search("Naresh Kuma");
-    // book.addContact();
+    
+    PhoneBook book("data.txt");
+    int choice;
+    while (true)
+    {
+        cout << "Phone Book Menu:\n";
+        cout << "1. Add Contact\n";
+        cout << "2. Display Contacts\n";
+        cout << "3. Search Contact\n";
+        cout << "4. Delete Contact\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            book.addContact();
+            break;
+        case 2:
+            book.display();
+            break;
+        case 3:
+        {
+            string searchTerm;
+            cout << "Enter search term: ";
+            cin >> searchTerm;
+            book.searchContact(searchTerm);
+        }
+            break;
+        case 4:
+        {
+            string searchTerm;
+            cout << "Enter contact name or phone number to delete: ";
+            cin >> searchTerm;
+            book.deleteContact(searchTerm);
+        }
+            break;
+        case 5:
+            // Save the contacts and exit
+            return 0;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+    }
+
+    return 0;
 }
 
 string *split(string data)
@@ -256,17 +298,19 @@ string *split(string data)
     string *arr = new string[3]{"", "", ""};
     for (int i = 0; i < data.length(); i++)
     {
-        if (data[i] == ',')
+        if (data[i] == ',') // in last not any , so we create another loop.
         {
             for (; start < end; start++)
             {
                 arr[inputNumber] += data[start];
             }
             inputNumber += 1;
-            start++;
+            start++;   // Point to comman change it.
         }
-        end++;
+        end++; //Point to comman change it.
     }
+
+    // In last not any comman(,)
     for (; start < end; start++)
     {
         arr[inputNumber] += data[start];
